@@ -96,29 +96,29 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'ubertrip',
         'USER': 'postgres',
-        'PASSWORD': '157andre',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
 #GOOGLE
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '293043449857-midih2tu3vpluonahdamk42vsvg3bvkf.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'uYP6-HOeXU9-wgOONBIHupJH'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 
 #FACEBOOK
-SOCIAL_AUTH_FACEBOOK_KEY = '466989157855947'        # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = '82b7a3a963bcb705e5ff82b492798046'  # App Secret
+SOCIAL_AUTH_FACEBOOK_KEY = ''        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = ''  # App Secret
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'travelfindo',
-    'API_KEY': '544186255571959',
-    'API_SECRET': '-xRvLmwm9-nCxnrJN488xE2vS0U',
+    'API_KEY': '',
+    'API_SECRET': '',
 }
 cloudinary.config(
     cloud_name = 'travelfindo', 
-    api_key = '544186255571959',
-    api_secret ='-xRvLmwm9-nCxnrJN488xE2vS0U'
+    api_key = '',
+    api_secret =''
 )
 
 #EMAIL HOST
