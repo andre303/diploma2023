@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} - {% translate "Confirm booking" %} - {{item.name}}{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $( document ).ready(function() {
+    });
+  </script>
+{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  {% if not item.active %}
+  <div class="alert alert-danger" role="alert">
+    {% translate "This is draft, not active trip / guide" %}
+  </div>
+  {% endif %}
+  <h2>
+    {% translate "Confirm booking" %}: {{item.name}}
+  </h2>
+  
+  <strong>{% translate "Location" %}:</strong>
+  <a class="href3" href="/country/{{item.country.slug}}/">{{item.country}}</a> / 
+  <a class="href3" href="/city/{{item.city.slug}}/">{{item.city}}</a>
+  <hr>
+  <div class="row">
+    <div class="col-sm-9">
+      {% if not item.active %}
+        {% translate "No bookings for draft offering allowed!" %}
+      {% else %}
+        <form method="POST" action="finish/">
+          {% csrf_token %}
+          <div class="form-group row">
+            <label for="tourist_name" class="col-sm-2 col-form-label">
+              {% translate "Tourist name" %}
+            </label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="tourist_name" name="tourist_name" value="{{tourist_name}}">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="start_date" class="col-sm-2 col-form-label">
+              {% translate "Preferred date" %}
+            </label>
+            <div class="col-sm-10">
+              <input type="date" readonly class="form-control-plaintext" id="start_date" name="start_date" value="{{start_date}}">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="group_size" class="col-sm-2 col-form-label">
+              {% translate "Number of participants in tour" %}
+            </label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="group_size" name="group_size" value="{{group_size}}">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="comment" class="col-sm-2 col-form-label">
+              {% translate "Special wishes for tour" %}
+            </label>
+            <div class="col-sm-10">
+              <textarea rows="3" readonly class="form-control-plaintext" id="comment" name="comment">{{comment}}</textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="tourist_phone" class="col-sm-2 col-form-label">
+              {% translate "Tourist phone" %}
+            </label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" id="tourist_phone" name="tourist_phone" value="{{tourist_phone}}">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            {% translate "Confirm booking" %} {{item.name}}
+          </button>
+          <a href="#" class="btn" onclick="window.history.back(); return false;">
+            {% translate "or go back" %}
+          </a>
+        </form>
+      {% endif %}
+    </div>
+    <div class="col-sm-3">
+      <h3>{% translate "Help for trip booking" %}</h3>
+
+      {{request.settings.booking_help|safe}}
+    </div>
+
+</div>
+{% endblock %}

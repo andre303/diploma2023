@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+{% load crispy_forms_tags %}
+<style>
+    .profile-container {
+        min-width: 60vw;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .form-group {
+        max-width: 70%;
+        font-size: 1.3rem;
+        padding: 1rem;
+    }
+
+    .form-group select {
+        font-size: 1.3rem;
+    }
+
+    .location {
+        display: flex;
+        font-size: 1.3rem;
+        margin: 0.3rem 0;
+    }
+
+    .location input {
+        margin: 0;
+        padding: 0;
+        width: 30%;
+    }
+
+    .location-check {
+        height: 1.6rem;
+        width: 1.6rem;
+    }
+
+    .locations {
+        display: grid;
+        grid-template-columns: 0.2fr 1fr 0.2fr 1fr;
+    }
+    .help-block strong{
+        color: red;
+    }
+    @media screen and (max-width:800px) {
+        .form-group{
+            max-width: 100%;
+        }
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{% static 'scripts/guide_profile.js' %}" defer></script>
+<link rel="stylesheet" href="{% static 'guide_profile.css' %}">
+<h1 style="padding-left: 2rem;">Гід</h1>
+<div class="id"><h3 style="padding-left: 2rem;">Логін: {{request.user.username}}</h3></div>
+<div class="container-fluid profile-container">
+    {%if not item.active%}
+    <div class="alert alert-danger" role="alert" style="text-align: center;">Ваш профіль знаходиться на модерації</div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <h3 align="center">Ваше фото</h3>
+            {% include 'avatar_changing.html' %}
+        </div>
+        <div class="col-md-6">
+            <br><br>
+            <a href="/booking_list/" class="btn red-button">Бронювання</a>
+            <a href="/trip/{{item.pk}}/" class="btn red-button">Перейти на оголошення</a>
+            <a href="{%url 'savedGuides' %}" class="btn red-button">Збережені</a>
+            <a href="{%url 'change_password' %}" class="btn red-button">Змінити пароль</a>
+        </div>  
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container_fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 align="center">Ваше відео</h3>
+                        <div class="profile-video">
+                            <iframe width="480" height="300" src="{{item.video_embed}}" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+  
+
+            <form method="POST" action="/profile/" id="guide-edit-form" style="width: 100%;">
+                {% csrf_token %}
+                {%if form.errors%}
+                <strong style="color:red">Помилка редагування, перевірте правильність вводу у поля</strong>
+                {%endif%}
+                {%crispy form%}
+            </form>
+
+{%endblock%}

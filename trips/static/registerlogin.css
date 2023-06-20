@@ -1,0 +1,150 @@
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+.close-register,.close-login{
+    position: absolute;
+    top:0;
+    right: 0;
+    color:#68696d;
+    font-size: 1.4rem;
+    padding: 20px;
+    transition-duration: 0.3s;
+}
+.close-register:hover,.close-login:hover{
+    color: black;
+}
+.login-wrapper,.register-wrapper{
+    display: none;
+    position: fixed;
+    top:0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index:10;
+}
+
+.login-block,.register-block{
+    position: relative;
+    display: flex;
+    padding: 30px 20px;
+    flex-direction: column;
+    align-items: left;
+    /* justify-content: ; */
+    width: 40%;
+    min-height: 80%;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    overflow: auto;
+}
+.register-block .register-subtitle,.login-block .login-subtitle{
+    color:#68696d;
+}
+
+.social-button,.email {
+    text-decoration: none;
+    width: 90%;
+    border: 0;
+    text-align: center;
+    margin: 10px auto;
+    padding: 0.6rem;
+    color: white;
+    border-radius: 15px;
+    font-size: 1.5rem;
+}
+.email{
+    text-decoration: none;
+    background: #18a5ef;
+    cursor: pointer;
+}
+.email:hover{
+    background: #1591d3;
+}
+.social-button:hover ,.email:hover{
+    text-decoration: none;
+    color: white;
+}
+
+.facebook {
+    background: #3a5897;
+}
+
+.google {
+    background: #df4f3f;
+}
+.or-line{
+    display: flex;
+    justify-content: space-between;
+    color:#68696d;
+    margin: 10px 0;
+}
+.line{
+    border-bottom: 2px solid lightgray;
+    margin: 10px 0;
+}
+.or-line .line{
+    width: 43%;
+}
+
+/* Form styles */
+.form-wrapper{
+    display: none;
+}
+.register-form,.login-form{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+.register-form label,.login-form label{
+    color: #68696d;
+    
+}
+.register-form input,.login-form input{
+    margin: 10px 0;
+    height: 2rem;
+    width: 90%;
+    margin: 10px auto;
+    border:none;
+    outline: 1px solid black;
+    transition-duration: 0.4s;
+}
+.register-form input:focus,.login-form input:focus{
+    outline: 2px solid rgb(62, 189, 231);
+}
+.register-form input[type="submit"],.login-form input[type="submit"]{
+    width: 90%;
+    height: 2rem;
+    color: white;
+    background: rgb(255, 72, 72);
+    border: 1px solid white;
+    outline: none;
+    border-radius: 3px;
+    transition-duration: 0.3s;
+}
+.register-form input[type="submit"]:focus,.register-form input[type="submit"]:active,
+.login-form input[type="submit"]:focus,.login-form input[type="submit"]:active{
+    outline: none;
+    border:none;
+}
+.show{
+    display: flex;
+}
+.hide{
+    display: none;
+}
+
+@media only screen and (max-width:800px){
+    .login-block{
+        width: 90%;
+    }
+    .register-block{
+        width: 90%;
+    }
+}

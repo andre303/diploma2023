@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load static %}
+{% load poll_extras %}
+
+<div class="list-item" onmouseenter="videoOver(this,'{{item.youtube_video_url}}')">
+
+  <div class="img-wrapper">
+    <a href="/trip/{{item.pk}}/">
+      {%if item.image%}
+      <img src="{{item.image.url}}" alt="{{item.name}}">
+      {%else%}
+      <img src="{% static 'avatar_sample.png' %}" alt="{{item.name}}">
+      {%endif%}
+    </a>
+    {% if user.is_authenticated %}
+      {% isSaved item user as isSaved_flag %}
+      {% if isSaved_flag%}
+      <i class="fas fa-heart" title="Додати до збережених" onclick="removeFromSaved(this,'{{item.pk}}')"></i>
+      {% else %}
+      <i class="far fa-heart" title="Додати до збережених" onclick="addToSaved(this,'{{item.pk}}')"></i>
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="list-item-main">
+
+    <div class="list-item-head">
+      <div class="hiden-image">
+        {%if item.image%}
+        <img src="{{item.image.url}}" alt="{{item.name}}">
+        {%else%}
+        <img src="{% static 'avatar_sample.png' %}" alt="{{item.name}}">
+        {%endif%}
+        {% if user.is_authenticated %}
+        {% if isSaved_flag%}
+        <i class="fas fa-heart" title="Додати до збережених" onclick="removeFromSaved(this,'{{item.pk}}')"></i>
+        {% else %}
+        <i class="far fa-heart" title="Додати до збережених" onclick="addToSaved(this,'{{item.pk}}')"></i>
+        {% endif %}
+      {% endif %}
+      </div>
+      <div class="name">
+        <span> <b> {{item.name}} </b>
+          {% if item.confirmed %}
+          <i class="fas fa-check confirmed" data-tooltip="Підтверджений адміністрацією гід"></i>
+
+          {%endif%}
+        </span>
+        <div class="tour-number grey">{{item.trip_count}} екскурсій</div>
+      </div>
+      <div class="indicators">
+        <div class="rate">
+          {% if item.rating %}
+          <span class="stars">
+            <i class="fas fa-star"></i>
+            {{item.rating}}
+          </span>
+          <span class="sub-text bold">{{item.review_set.count}} <span class="grey"> відгуків </span></span>
+          {% else %}
+          <div class="alert alert-success">Новий гід</div>
+          {% endif %}
+        </div>
+        <div class="price">
+          <span>{{item.price}}{{item.currency.symbol}}</span>
+          <span class="sub-text grey">За годину</span>
+        </div>
+      </div>
+    </div>
+    <div class="list-item-body">
+      <div class="list-item-info">
+        <div class="locations" onclick="expandthis(this)"><b> <i class="fas fa-compass"></i> Локації : </b> {% for location in item.locations.all %}
+          <a class="href3" href="/location/{{location.slug}}/">{{location}}</a>;
+          {% endfor %}</div>
+        <div class="languages grey" onclick="expandthis(this)"><b><i class="fas fa-language"></i> Мови : </b>{% for language in item.languages.all %}
+          <!-- <img src="{{language.flag_icon}}" /> -->
+          {{language}}
+          {% endfor %}</div>
+        <div class="main-text">
+          {{item.description|striptags|safe|truncatechars:500}}
+        </div> <span href="" class="expand" onclick="text_expand(this)"> Детальніше </span>
+      </div>
+      <div class="card-buttons">
+        <a href="/trip/{{item.pk}}/"> <button class="detail red-button">Детальніше</button></a>
+        <a href="/trip/{{item.pk}}/#booking"> <button class="book">Забронювати</button></a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %} Ваші бронювання {% endblock %}
+{% block content%}
+<link rel="stylesheet" href="{% static 'booking_list.css' %}">
+<table>
+    <caption>Архів бронювань</caption>
+
+    {% if type == 'guide' %}
+    <thead>
+        <tr>
+            <th scope="col">Ім'я</th>
+            <th scope="col">Бажана дата</th>
+            <th scope="col">Побажання</th>
+            <th scope="col">Кількість учасників</th>
+            <th scope="col">Номер телефону</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in list %}
+        <tr>
+            <td data-label="Ім'я">{{booking.user_name}}</td>
+            <td data-label="Бажана дата">{{booking.preferredDate}}</td>
+            <td data-label="Побажання" style="overflow: hidden;">{{booking.text|safe}}</td>
+            <td data-label="Кількість учасниківв">{{booking.numberOfParticipants}}</td>
+            <td data-label="Номер телефону">{{booking.phone}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+    {% elif type == 'tourist'%}
+    <thead>
+        <tr>
+            <th scope="col">Гід</th>
+            <th scope="col">Бажана дата</th>
+            <th scope="col">Побажання</th>
+            <th scope="col">Кількість учасників</th>
+            <th scope="col">Номер телефону</th>
+            <th scope="col">Підтверджено гідом</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in list %}
+        <tr>
+            <td data-label="Гід"><a href="/trip/{{booking.trip.pk}}/">{{booking.trip.name}}</a></td>
+            <td data-label="Бажана дата">{{booking.preferredDate}}</td>
+            <td data-label="Побажання" style="overflow: hidden;">{{booking.text|safe}}</td>
+            <td data-label="Кількість учасниківв">{{booking.numberOfParticipants}}</td>
+            <td data-label="Номер телефону">{{booking.phone}}</td>
+
+            <td data-label="Підтверджено гідом">
+                {% if booking.isConfirmed%}
+                  <span style="color: #28a745;">  Підтверджено </span>
+                {% elif booking.isCanceled %}
+                <span style="color: #dc3545;">  Скасовано </span>
+                {%else%}
+                Очікуйте
+                {%endif%}
+            </td>
+        </tr>
+        {%endfor%}
+    </tbody>
+    {%endif%}
+</table>
+{%endblock%}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<div class="alert alert-danger" role="alert" style="text-align: center;">{{error}}</div>
+<a href="" class="btn btn-primary" onclick="window.history.back(); return false;" style="margin: 0.5rem 1rem;">Назад</a>
+{%endblock%}

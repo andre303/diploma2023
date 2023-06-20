@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load poll_extras %}
+{% load cloudinary %}
+{% block styles %}
+
+{% endblock %}
+{% block filter %}
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-md-3"> <input type="text" class="form-control"> </div>
+    <div class="col-md-3"> <input type="text" class="form-control"></div>
+    <div class="col-md-3"> <input type="text" class="form-control"></div>
+    <div class="col-md-3"> <input type="text" class="form-control"></div>
+  </div>
+</div> -->
+{% endblock %}
+{% block content %}
+<script>
+  function addToSaved(elem,item_pk) {
+    $.ajax({
+      url: "/saveGuide/",
+      type: "POST",
+      dataType: 'json',
+      data: {
+        "trip_pk": item_pk,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (data) {
+        console.log(data);
+        $(elem).attr("onclick","removeFromSaved(this,\""+item_pk+"\" )")
+        $(elem).removeClass('far')
+        $(elem).addClass('fas')
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+  }
+
+  function removeFromSaved(elem,item_pk) {
+    $.ajax({
+      url: "/unSaveGuide/",
+      type: "POST",
+      dataType: 'json',
+      data: {
+        "trip_pk": item_pk,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (data) {
+        console.log(data);
+        $(elem).attr("onclick","addToSaved(this,\""+item_pk+"\" )")
+        $(elem).removeClass('fas')
+        $(elem).addClass('far')
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+  }
+</script>
+<link rel="stylesheet" href="{% static 'video.css' %}">
+<script src="{% static 'scripts/video.js' %}" defer></script>
+<script src="{% static 'scripts/item_row.js' %}" defer></script>
+<link rel="stylesheet" href="{% static 'item_row.css' %}">
+<link rel="stylesheet" href="{% static 'list.css' %}">
+
+<div class="container-fluid" style="width: 100%;">
+  <div class="row">
+    <div class="col-sm-8">
+      <h2>
+        {% if not query %}
+        {% endif %}  
+        {% if country %}
+        :: {{country}}
+        {% endif %}
+
+        {% if city %}
+        :: {{city}}
+        {% endif %}
+
+        {% if query %}
+        :: результати пошуку по "{{query}}"
+        {% endif %}
+      </h2>
+
+      
+      {% for item in items %}
+      {% include 'item_row.html' %}
+      {% endfor %}
+    </div>
+    <div class="col-sm-4 video-wrapper" style="margin-left: 20px;">
+      <iframe src="" title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <script>
+
+    </script>
+    <script defer>
+      $(document).ready(function () {
+        var first_elem = document.getElementsByClassName('list-item')[0]
+        if (first_elem)
+          videoOver(first_elem, "{{items.0.youtube_video_url}}")
+      })
+    </script>
+  </div>
+</div>
+<div class="container pagination">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+    {% if items.has_previous %}
+        <li class="page-item">
+        <a class="page-link" href="?page={{ items.previous_page_number }}">Попередня</a>
+      </li>
+    {% else %}
+        <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Попередня</a>
+      </li>
+    {% endif %}
+
+    {% if items.number|add:'-4' > 1 %}
+        <li class="page-item"><a class="page-link" href="?page={{ items.number|add:'-5' }}">&hellip;</a></li>
+    {% endif %}
+
+    {% for i in items.paginator.page_range %}
+        {% if items.number == i %}
+            <li class="page-item active" aria-current="page">
+          <span class="page-link">
+            {{ i }}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        {% elif i > items.number|add:'-5' and i < items.number|add:'5' %}
+             <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if items.paginator.num_pages > items.number|add:'4' %}
+       <li class="page-item"><a class="page-link" href="?page={{ items.number|add:'5' }}">&hellip;</a></li>
+    {% endif %}
+
+    {% if items.has_next %}
+        <li class="page-item">
+        <a class="page-link" href="?page={{ items.next_page_number }}">Наступна</a>
+      </li>
+    {% else %}
+        <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Наступна</a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+</div>
+
+{% endblock %}

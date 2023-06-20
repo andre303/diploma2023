@@ -1,0 +1,28 @@
+/* Styles for smartphones */
+@media only screen and (max-width:768px) {
+    .login-block,
+    .register-block{
+        width: 90%;
+    }
+   
+}
+@media(max-width:900px){
+    #search-field{
+        width: 70vw;
+    }
+    #hints li{
+        width: 70vw;
+    }
+}
+@media(max-width:990px){
+    .my-nav-bar{
+        display: flex;
+        flex-direction: column;
+    }
+    .navbar-nav .dropdown-menu{
+        display: inline-block !important;
+    }
+    .show{
+        display: inline-block;
+    }
+}

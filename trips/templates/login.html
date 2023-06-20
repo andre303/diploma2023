@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block search %}{% endblock %}
+
+{% block content %}
+<div class="container">
+<h1>{% translate "Login" %}</h1>
+
+<div id="social_login">
+    <a href="{% url 'social:begin' 'google-oauth2' %}">Війти через Google</a> <br>
+    <a href="{% url 'social:begin' 'facebook' %}">Війти через Facebook</a> <br>
+    <input type="button" name="" href="{% url 'social:begin' 'google-oauth2' %}" value='{% translate "Login with Google" %}' />
+    <br />
+    <input type="button" name="" value='{% translate "Login with Facebook" %}' />
+</div>
+</div>
+{% endblock %}

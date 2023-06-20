@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block search %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+
+      <h2>
+        {% translate "Find a tour agent" %}
+      </h2>
+
+    </div>
+    <div class="col-sm-4">
+      <h3>{% translate "View on map" %}</h3>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

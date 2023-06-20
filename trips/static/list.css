@@ -1,0 +1,15 @@
+.page-link{
+    color:red;
+  }
+  .page-link:hover{
+    color: red;
+  }
+  .page-link:focus,
+  .page-link:active{
+    box-shadow:none;
+  }
+  .page-item.active .page-link{
+    background: red;
+    border: red;
+    color: white;
+  }

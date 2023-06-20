@@ -1,0 +1,78 @@
+:root{
+    --input-width:300px;
+    --secondary-color:#f53938;
+    --secondary-color-darker:#cc3d3d;
+    --secondary-grey: rgba(0, 0, 0, 0.5);
+    --secondary-grey-darker: rgba(0, 0, 0, 0.7);
+    --logo-border-size:3px;
+   }
+.booking-form-wrapper{
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    position: fixed;
+    overflow: auto;
+    display: none;
+  }
+  .booking-form-wrapper form{
+    position: relative;
+    margin: auto;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-top:1rem;
+    margin-bottom:1rem ;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+  .booking-form-wrapper form input[type="submit"]{
+    width: 30vw;
+  }
+  .booking-form-wrapper form .form-group{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .booking-form-wrapper .tox-tinymce{
+    width: 300px;
+    resize:none;
+    max-height: 300px;
+  }
+  .booking-form-wrapper .fa-times{
+    position: absolute;
+    top:1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: rgba(0,0,0,0.5);
+    transition-duration: 0.3s;
+  }
+  .booking-form-wrapper .fa-times:hover{
+    color:black;
+  }
+
+   .booking-form-wrapper input{
+     border-radius: 10px !important;
+     height: 40px !important;
+     width:  var(--input-width);
+   }
+   .booking-form-wrapper select[name="preferredTime"]{
+     width: var(--input-width);
+     height: 40px !important;
+   }
+   .booking-form-wrapper .btn-primary{
+    background: var(--secondary-color) ;
+    border: none;
+    outline: var(--secondary-color);
+   }
+   .booking-form-wrapper .btn-primary:hover{
+       background: var(--secondary-color-darker) !important;
+   }

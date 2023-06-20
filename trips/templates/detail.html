@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %} - {{item.name}}{% endblock %}
+{% block style %}
+
+{% endblock %}
+{% block scripts %}
+
+
+
+{% endblock %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{% static 'scripts/detail.js' %} " defer></script>
+<script src="{% static 'scripts/booking.js' %} " defer></script>
+<link rel="stylesheet" href="{% static 'detail.css' %}">
+<link rel="stylesheet" href="{% static 'booking.css' %}">
+<style>
+  .tag-location {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white !important;
+  }
+</style>
+<div class="container">
+  {% if not item.active %}
+  <div class="alert alert-danger" role="alert">
+    {% translate "This is draft, not active trip / guide" %}
+  </div>
+  {% endif %}
+  <h2>
+    {{item.name}} {{item.price}}{{item.currency.symbol}}
+  </h2>
+
+  <strong>Локації:</strong>
+  {% for location in item.locations.all %}
+  <a class="href3 tag-location" href="/location/{{location.slug}}/">{{location}}</a>
+  {% endfor %}
+  <br />
+  <strong>Мови:</strong>
+  {% for language in item.languages.all %}
+  <img src="{{language.flag_icon}}" style="width: 25px;" />
+  {{language}};
+  {% endfor %}
+  <hr>
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="video-container">
+      <iframe  src="{{item.video_embed}}" class="responsive-iframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+      </div> <br>
+
+      {{item.description|safe}}
+
+      <h3>
+        Забронювати гіда
+        <a name="booking"></a>
+      </h3>
+
+      {% if user.is_authenticated%}
+      <button class="btn red-button" style="height: 50px;" onclick="$('.booking-form-wrapper').fadeToggle(400)">Забронювати</button>
+      <div class="booking-form-wrapper">
+      {% include 'booking_form.html' %}
+      </div>
+
+      {% else %}
+      <button class="btn red-button" onclick="$('.login-wrapper').css('display','flex')">Авторизуйтесь щоб забронювати гіда</button>
+      {% endif %}
+      {% if item.special %}
+      <h3>{% translate "Why is this guide so special?" %}</h3>
+      <ul>
+        {% for i in item.get_special %}
+        <li>{{i}}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <h3>{% translate "Вас також може зацікавити" %}</h3>
+      <div class="featured-items container-fluid" >
+        <div class="row">
+        {% for featured in items %}
+        {% if forloop.counter0 > 2 %}
+        {% else %}
+        <div class="card col-sm-3" style="padding: 0.5rem;margin-left: 10px;">
+          <a href="/trip/{{featured.pk}}"> <img src="{{featured.video_img}}" class="card-img-top" alt="{{featured.name}}"></a>
+          <div class="card-body">
+            <h5 class="card-title">{{featured.name}}</h5>
+            <p class="card-text"> {{featured.description|striptags|safe|truncatechars:50}} </p>
+            <a href="/trip/{{featured.pk}}" class="btn btn-danger">Детальніше</a>
+          </div>
+        </div>
+        {% endif %}
+        {%endfor%}
+      </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <h3>Контакти гіда</h3>
+      {% if item.phone %}
+      <p>{% translate "Phone" %}: {{item.phone}}</p>
+      {% endif %}
+      {% if item.phone2 %}
+      <p>{% translate "Phone #2" %}: {{item.phone2}}</p>
+      {% endif %}
+      {% if item.facebook %}
+      <p>{% translate "Facebook page" %}: <a href="{{item.facebook}}">{{item.facebook}}</a></p>
+      {% endif %}
+      {% if item.instagram %}
+      <p>{% translate "Instagram" %}: <a href="{{item.instagram}}">{{item.instagram}}</a></p>
+      {% endif %}
+      {% if item.telegram %}
+      <p>{% translate "Telegram" %}: {{item.telegram}}</p>
+      {% endif %}
+      {% if item.whatsapp %}
+      <p>{% translate "WhatsApp" %}: {{item.whatsapp}}</p>
+      {% endif %}
+      {% if item.skype %}
+      <p>{% translate "Skype" %}: {{item.skype}}</p>
+      {% endif %}
+      <h3>Рейтинг гіда</h3>
+
+      <p style="font-size:24px;">
+        {% if item.rating %}
+        
+        <i class="fa fa-star" aria-hidden="true"></i> {{item.rating}}
+        {% endif %}
+      </p>
+
+      <h3 style="text-align: center;">Відгуки про гіда</h3>
+      {% if request.user.is_authenticated %}
+      <div class="card">
+        <form action="/review/{{item.pk}}/" method="POST" id="review_form">
+          {% csrf_token %}
+          <div class="card-body">
+            <h5 class="card-title">
+              <span class="stars">
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+              </span>
+              <br />
+            </h5>
+            <textarea name="review_text" id="review_text" class="form-control" style="resize: none;"></textarea><br />
+            <input type="hidden" value="5" required id="rating_field" name="rating_field">
+            <button type="submit" class="form-control">Відправити</button>
+          </div>
+
+        </form>
+      </div>
+      {% endif %}
+
+
+      <div class="pagination" >
+        {% if reviews.has_next %}
+        <button id="prevPage" disabled onclick="prevPage('{{reviews.number}}','{{item.pk}}','{{ reviews.paginator.num_pages }}')"> <i class="fas fa-arrow-circle-left"></i></button>
+        <button id="nextPage" onclick="nextPage('{{reviews.number}}','{{item.pk}}','{{ reviews.paginator.num_pages }}')"> <i class="fas fa-arrow-circle-right"></i></button>
+        {% endif %}
+      </div>
+      <div class="review-cards">
+      <style>
+        
+      </style>
+      {% for review in reviews %}
+      {% if review.isModerated %}
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            {% for i in review.rating_range %}
+            <i class="fa fa-star" aria-hidden="true"></i>
+            {% endfor %}
+            <br />
+            {{review}} <br/>
+            <small style="color:grey"> {{review.created|date:'Y-m-d'}} </small>
+          </h5>
+          {{review.text|safe|striptags|truncatechars:500}}
+        </div>
+        {% endif %}
+      </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+ 
+  {% endblock %}

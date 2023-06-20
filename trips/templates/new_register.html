@@ -1,0 +1,47 @@
+{% load i18n %}
+{% load static %}
+
+
+
+<div class="register-block">
+    <i class="fas fa-times close-register"></i>
+    <h3>Зареєструйтесь в UberTrip</h3>
+    <span class="register-subtitle">Зареєструйтесь, щоб додати речі до свого списку бажань і отримати доступ до своїх
+        замовлень з будь-якого пристрою.</span>
+    <style>
+       
+    </style>
+    <a href="{% url 'social:begin' 'google-oauth2' %}" class="google-register-button social-button google"><i
+            class="fab fa-google"></i></a>
+    <a href="{% url 'social:begin' 'facebook' %}" class="facebook-register-button social-button facebook"><i
+            class="fab fa-facebook-square"></i> </a>
+    <div class="or-line">
+        <div class="line"></div>
+        <div> або </div>
+        <div class="line"></div>
+    </div>
+    <a class="email-register-button email"><i class="fas fa-envelope"></i>Email</a>
+    <div class="form-wrapper">
+        <form action="/email_register/" class="register-form" method="POST">
+            {% csrf_token %}
+            {{RegisterForm.email.label}}
+            {{RegisterForm.email}}
+            {{RegisterForm.email.errors}}
+            {{RegisterForm.username.label}}
+            {{RegisterForm.username}}
+            {{RegisterForm.username.errors}}
+            {{RegisterForm.password.label}}
+            {{RegisterForm.password}}
+            {{RegisterForm.password.errors}}
+            <input type="submit" value="Зареєструйтесь">
+        </form>
+    </div>
+    <div class="line"></div>
+    <p>Маєте аккаунт? <a href="#" class="switch">Увійдіть</a> </p>
+</div>
+<style>
+    .errorlist li {
+        list-style: none;
+        color: red;
+    }
+</style>

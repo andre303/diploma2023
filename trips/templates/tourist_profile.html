@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+<!-- Block search -->
+{% block content %}
+<style>
+    .form-row{
+        font-size: 1.5rem;
+        flex-wrap: unset;
+    }
+    .form-row label{
+        width: 30%;
+    }
+</style>
+{% if Message %}
+<div class="alert alert-success">{{Message}}</div>
+{%endif%}
+<h1 style="padding-left: 2rem;">Турист:</h1>
+<div class="id">
+    <h3 style="padding-left: 2rem;">{{request.user.username}}</h3>
+</div>
+<div class="container-fluid profile-container" style="padding: 2rem;">
+    <div class="row">
+        <div class="col-md-8">
+            <br>
+            <a href="/booking_list/" class="btn red-button">Бронювання</a>
+            <a class="btn red-button" href="{%url 'guide_register' %}">Стати гідом</a>
+            <a class="btn red-button" href="{%url 'savedGuides' %}">Збережені</a>
+            <a class="btn red-button" href="{%url 'change_password' %}">Змінити пароль</a>
+        </div>
+        <div class="col-md-4">
+            <button class="btn red-button" onclick="$('.input-toggler').prop('disabled',false)"><i class="fas fa-pen"></i> Редагувати</button>
+            <form action="/profile/"  method="POST" >
+                {% if form.errors%}
+                {{form.errors}}
+                {%endif%}
+                <fieldset class="input-toggler" disabled>
+                {% csrf_token %} 
+                {% for field in form %}
+                <div class="form-row">
+                    {{field.label_tag}}
+                    {{field}}
+                </div>
+                {% endfor %}
+                <br>
+                <div class="form-row" style="display: flex; justify-content: space-evenly;">
+                <input type="submit" value="Підтвердити" class="btn red-button">     
+                <input type="reset" class=" btn grey-button" value="Відмінити">
+                </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+</div>
+{%endblock%}

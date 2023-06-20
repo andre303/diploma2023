@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block search %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>
+        {% translate "Register as a guide" %}
+    </h1>
+
+    <div id="social_login">
+        <input type="button" name="" value='{% translate "Register with Google" %}' />
+        <br />
+        <input type="button" name="" value='{% translate "Register with Facebook" %}' />
+    </div>
+
+    {{request.settings.register_text|safe}}
+</div>
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% load i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    {{request.settings.title}}{% block title %}{% endblock %}
+  </title>
+
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous">
+  </script>
+
+  <meta name="viewport" content="width=device-width" />
+  <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'main.css'%}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'base.css'%}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'registerlogin.css' %}">
+  <link rel="stylesheet" href="{% static 'media.css'%}">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,900i&amp;display=swap&amp;subset=cyrillic"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/64cafa6346.js" crossorigin="anonymous"></script>
+  <script src="{% static 'scripts/base.js'%}" defer></script>
+ 
+  {% block scripts %}
+
+  {% endblock %}
+
+</head>
+
+<body>
+
+ 
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="navbar-brand brand-name" href="/">{{request.settings.title}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse my-nav-bar" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'list' %}">Гіди</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav  my-2 my-lg-0">
+        {%if request.user.is_authenticated == False %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Зареєструватись
+          </a>
+          <div class="dropdown-menu register-options" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Турист</a>
+            <a class="dropdown-item" href="#">Гід</a>
+          </div>
+        </li>
+        {% endif %}
+
+        {%if request.user.is_authenticated %}
+        <li class="nav-item dropdown profile">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-alt" style="font-size: 25px;"></i>
+          </a>
+          <div class="dropdown-menu profile-dropdown" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'booking_list' %}">Бронювання 
+            {% if isGuide and Guide_new_bookings > 0 %}
+            <span class="new_bookings" style="color: #50bf16;"> +{{Guide_new_bookings}} </span>
+            {% endif %}  
+            </a>     
+            <a class="dropdown-item" href="{%url 'savedGuides' %}">Збережені</a>
+            {% if isGuide %}
+            <a href="/trip/{{Guide_pk}}/" class="dropdown-item">Ваше оголошення</a>
+            {% else %}
+            <a class="dropdown-item" href="{%url 'guide_register' %}">Стати гідом</a>   
+            {% endif %}
+            <a class="dropdown-item" href="{% url 'profile' %}">Редагувати профіль</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Вийти</a>
+          </div>
+          {% else %}
+        <li class="nav-item active">
+          <a href="#" id="sign-in" class="nav-link" id="sign-in"><i class="fas fa-sign-in-alt" style="font-size: 25px;"></i></a>
+          {% endif %}
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+
+  <div class="login-wrapper">
+    {% include 'new_login.html' %}
+  </div>
+
+  <div class="register-wrapper">
+    {% include 'new_register.html' %}
+    {% if RegisterForm.errors %}
+    <script>
+      $('.register-wrapper').css('display','flex')
+    </script>
+    <script>
+      $('.register-wrapper .form-wrapper').toggle(400);
+      $('.register-wrapper .social-button').toggle(400)
+      $('.register-wrapper .or-line').toggle(400)
+    </script>
+    {%endif%}
+  </div>
+
+  <main>
+    {% block search %}
+    <div class="jumbotron text-center">
+      <div class="container">
+       
+        <h2>
+          {{request.settings.slogan}}
+        </h2> <br>
+
+        
+        <div class="search-wrapper">
+          <script>
+            
+          </script>
+          <form method="GET" action="/list/" id="search">
+            <div class="search-field">
+            <div class="marker" ><i class="fas fa-map-marker-alt"></i></div>
+            <input type="text" name="query" id="search-field" placeholder="Київ, Львів, Одеса..." autocomplete="off"
+              oninput="livesearch(this)">
+            <button type="submit" id="search-submit"><i class="fas fa-search"></i></button>
+          </div>
+            <ul id="hints">
+          </ul>
+          </form>
+         
+        </div>     
+      </div>
+    {% block filter %}
+    {% endblock %}
+    </div>
+    
+    {% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer text-center">
+    <div class="container">
+      <div class="row">
+        {% block footer %}
+        {{request.settings.footer_text|safe}}
+        {% endblock %}
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

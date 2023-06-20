@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %} Видалення профілю {% endblock %}
+{% block content%}
+{% if user.is_authenticated %}
+<style>
+#profileDeletionForm{
+    padding: 1rem;
+    margin: auto;
+    width: 60%;
+    font-size: 1.5rem;
+}
+#profileDeletionForm .form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+#profileDeletionForm input[type="checkbox"]{
+    width: 40px;
+    height: 40px;
+}
+</style>
+<form action="/deleteProfile/" method="POST" id="profileDeletionForm">
+    {% csrf_token %}
+    <div class="form-group">
+    <label for="isSure">Ви точно бажаєте видалити свій профіль та дані про себе?</label>
+    <input type="checkbox" required id="isSure" name="isSure" class="form-control">
+    </div>
+    <input type="submit" class="btn red-button" value="Видалити">
+</form>
+{% elif Message %}
+<div class="alert alert-success" style="text-align: center;">{{Message}}</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,71 @@
+{% load i18n %}
+{% load static %}
+{% load cloudinary %}
+<link rel="stylesheet" href="https://unpkg.com/dropzone/dist/dropzone.css" />
+<link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'avatar_changing.css' %}">
+<script src="https://unpkg.com/dropzone"></script>
+<script src="https://unpkg.com/cropperjs"></script>
+<div class="load-wrapper">
+<div class="bubblingG">
+	<span id="bubblingG_1">
+	</span>
+	<span id="bubblingG_2">
+	</span>
+	<span id="bubblingG_3">
+	</span>
+</div>
+</div>
+<div class="container" >
+    <div class="row">
+        <div class="col-md-4">&nbsp;</div>
+        <div class="col-md-4">
+            <div class="image_area">
+                <form method="post" action="change_photo/" id="avatar_changing_form">
+                    {% csrf_token %}
+                    <label for="upload_image">
+                        {% if item.image%}
+                        <img src="{{item.image.url}}" alt="" style="max-height:300px" id="uploaded_image" class="img-responsive img-circle">
+                        {%else%}
+                        <img src="{%static 'avatar_sample.png' %}" id="uploaded_image"
+                            class="img-responsive img-circle" style="max-height:300px">  
+                        {%endif%}
+                        <div class="overlay">
+                            <div class="text">Натисніть, щоб змінити зображення</div>
+                        </div>
+                        {{imageForm.image}}
+                    </label>
+                </form>
+            </div>
+        </div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Обріжте зображення, щоб квадрат вміщав ваше лице</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="img-container">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <img src="" id="sample_image" />
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="preview"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="crop" class="btn btn-primary">Обрізати</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Відмінити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

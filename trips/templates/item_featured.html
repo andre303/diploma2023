@@ -1,0 +1,41 @@
+{% load i18n %}
+
+<!-- <div class="card">
+  <div class="card-body">
+    <a class="href3" href="/trip/{{featured.pk}}/">
+        <img class="card-img-left" src="{{featured.video_img}}" alt="{{featured.name}}" />
+        <h3 class="card-title">
+            {% if featured.rating %}
+                <i class="fa fa-star" aria-hidden="true"></i>
+                {% for i in featured.rating|make_list %}
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                {% endfor %}
+            {% endif %}
+
+            {{featured.name}}
+        </h3>
+
+        <strong>{% translate "Languages" %}:</strong>
+        {% for language in featured.languages.all %}
+            <img src="{{language.flag_icon}}" />{{language}}
+        {% endfor %}
+    </a>
+  </div>
+</div> -->
+<div class="card  ">
+  <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+    <img src="{{featured.video_img}}" class="img-fluid" />
+    <a href="#!">
+      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+    </a>
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">{{featured.name}}</h5>
+    <p class="card-text">
+      {{featured.description|striptags|safe|truncatechars:200}}
+    </p>
+
+    <a type="button" class="btn btn-primary" href="/trip/{{featured.pk}}/">Детальніше</a>
+  </div>
+</div>

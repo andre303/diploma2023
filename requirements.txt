@@ -1,0 +1,14 @@
+django
+gunicorn
+django-heroku
+django-rosetta
+django-tinymce
+dj-database-url
+social-auth-app-django
+django-crispy-forms
+six
+Pillow
+django-import-export
+python-social-auth
+cloudinary
+dj3-cloudinary-storage

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+  {{request.settings.main_text|safe}}
+
+  <div class="subjects">
+  {% for item in items %}
+    <div class="plate">
+      <div class="link">
+        <h6 class="title">
+          <a class="href3" href="/city/{{item.slug}}/">{{item}}</a>
+        </h6>
+        <p class="subtitle">{{item.number_of_offers}} {% translate "trips in this city" %}</p>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+  {{request.settings.main_text_bottom|safe}}
+</div>
+{% endblock %}

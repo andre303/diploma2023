@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %} Ваші бронювання {% endblock %}
+{% block content%}
+<link rel="stylesheet" href="{% static 'booking_list.css' %}">
+<div class="cancel-form-wrapper">
+    <div class="cancel-wrapper">
+    <form class="cancel-form" method="POST" action="cancel/">
+        {% csrf_token %}
+        <i class="fas fa-times close-cancel" onclick="$('.cancel-form-wrapper').fadeToggle(400)"></i>
+        <label for="cancel-reason">Напишіть причину скасування</label>
+        <textarea id="cancel-reason" name="cancel-reason" cols="10" rows="10" class="form-control"></textarea> <br />
+        <input type="hidden" name="trip_pk" id="trip_pk">
+        <input type="submit" class="form-control btn-danger btn" value="Скасувати">
+    </form>
+</div>
+</div>
+
+<div class="reason-alert-wrapper">
+    <div class="reason-wrapper">
+        <i class="fas fa-times" onclick="$('.reason-alert-wrapper').fadeToggle(400)"></i>
+        <h3>Причина скасування</h3>
+        <div class="alert alert-danger">
+        </div>
+    </div>
+</div>
+<div class="detail-wrapper">
+    <div class="detail">
+        <h3>Детальніше</h3>
+        <div class="detail-sub-title">Ім'я замовника:</div>
+        <div class="name"></div><br>
+        <div class="detail-sub-title">Бажана дата:</div>
+        <div class="preferredDate"></div><br>
+        <div class="detail-sub-title">Особливі побажання:</div>
+        <div class="text"></div><br>
+        <div class="detail-sub-title">Кількість учасників:</div>
+        <div class="numberOfParticipants"></div><br>
+        <div class="detail-sub-title">Номер телефону:</div>
+        <div class="phone"></div><br><br>
+        <button class="btn red-button" onclick="$('.detail-wrapper').fadeToggle(400)">Згорнути</button>
+    </div>
+</div>
+<table>
+    <caption>Ваші бронювання</caption>
+    <thead>
+        <tr>
+            {% if type == 'guide' %}
+            <th scope="col">Ім'я</th>
+            {% else %}
+            <th scope="col">Гід</th>
+            {% endif %}
+            <th scope="col">Бажана дата</th>
+            <th scope="col">Статус</th>
+            {% if type == 'guide' %}
+            <th scope="col">Детальніше</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in list %}
+        <tr>
+            {% if type == 'guide' %}
+            <td data-label="Ім'я">{{booking.user_name}}</td>
+            {% else %}
+            <td data-label="Гід"><a href="/trip/{{booking.trip.pk}}/">{{booking.trip.name}}</a></td>
+            {% endif %}
+            <td data-label="Бажана дата">{{booking.preferredDate}}|{{booking.preferredTime}}</td>
+            <td data-label="Статус" class="table-status">
+                {% if booking.isConfirmed%}
+                <div class="alert alert-success"> Підтверджено </div>
+                <button onclick="showCancel('{{booking.pk}}')" class="btn btn-danger" >Скасувати</button>   
+                {% elif booking.isCanceled %}
+                <span style="color:#dc3545">Скасовано</span> <br>
+                <button onclick="showReason(this,'{{booking.cancel_message}}')" class="btn btn-danger" title="Настисніть щоб побачити причину скасування">Причина</button>
+                {%else%}
+                    {% if type == 'guide' %}
+                    <a href="/booking_list/confirm/{{booking.pk}}" class="btn btn-success" >Підтвердити</a>
+                    <button onclick="showCancel('{{booking.pk}}')" class="btn btn-danger" >Скасувати</button>
+                    {% else %}
+                    Очікується підтверження
+                    {% endif %}
+                {%endif%}
+            </td>
+            {% if type == 'guide' %}
+            <td data-label="Статус"> <button class="btn btn-danger" style="width: 100%;" onclick="showDetail('{{booking.user_name}}'
+            ,'{{booking.preferredDate}}','{{booking.preferredTime}}','{{booking.text|striptags|safe}}','{{booking.numberOfParticipants}}',
+            '{{booking.phone}}')">Детальніше</button> 
+            </td>
+            {% endif %}
+        </tr>
+        {%endfor%}
+    </tbody>
+  
+</table>
+<a href="booking_archive/" class="btn btn-info" style="width: 100%;">Архів</a>
+<script>
+    function showReason(elem,reason){
+        var wrp = $('.reason-alert-wrapper')
+        $(wrp).fadeToggle(400)
+        $('.reason-alert-wrapper .alert').text(reason)
+    }
+    function showCancel(trip_id){
+        var wrp = $('.cancel-form-wrapper')
+        $(wrp).fadeToggle(400)
+        $('.cancel-form-wrapper #trip_pk').attr('value',trip_id)
+    }
+    function showDetail(name,preferredDate,preferredTime,text,numberOfParticipants,phoneNumber){
+        let det_wrp = $('.detail-wrapper')
+        let det = $('.detail-wrapper .detail')
+        $(det).children('.name').text(name)
+        $(det).children('.preferredDate').text(preferredDate + " " +preferredTime)
+        $(det).children('.text').text(text)
+        $(det).children('.numberOfParticipants').text(numberOfParticipants)
+        $(det).children('.phone').text(phoneNumber)
+        $(det_wrp).fadeToggle(400)
+
+    }
+
+    $(document).mouseup(function (e){ // событие клика по веб-документу
+    var div1 = $(".cancel-wrapper"); // тут указываем ID элемента
+    if (div1.is(e.target) // если клик был не по нашему блоку
+        && div1.has(e.target).length === 0) { // и не по его дочерним элементам
+        $('.cancel-form-wrapper').fadeToggle(400)
+    }
+    var div2 = $(".reason-alert-wrapper"); // тут указываем ID элемента
+    if (div2.is(e.target) // если клик был не по нашему блоку
+        && div2.has(e.target).length === 0) { // и не по его дочерним элементам
+        $('.reason-alert-wrapper').fadeToggle(400)
+    }
+    var div3 = $('.detail-wrapper')
+    if (div3.is(e.target) // если клик был не по нашему блоку
+        && div3.has(e.target).length === 0) { // и не по его дочерним элементам
+        $('.detail-wrapper').fadeToggle(400)
+    }
+    });
+
+</script>
+{%endblock%}

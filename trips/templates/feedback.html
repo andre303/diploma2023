@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    #FeedbackForm{
+        width: 70%;
+        margin: auto;
+        text-align: center;
+    }
+    #FeedbackForm label{
+        text-align: center;
+        font-weight: bolder;
+        font-size: 2rem;
+    }
+    #FeedbackForm input[type="submit"]{
+        width: 100%;
+    }
+</style>
+<form action="/feedback/" method="POST" id="FeedbackForm">
+    {%crispy FeedbackForm%}
+</form>
+{%endblock%}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} - {% translate "Booking complete" %} - {{item.name}}{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript">
+    $( document ).ready(function() {
+    });
+  </script>
+{% endblock %}
+
+{% block search %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>
+    {% translate "Booking complete" %}!
+  </h2>
+  
+  <strong>{% translate "Location" %}:</strong>
+  <a class="href3" href="/country/{{item.country.slug}}/">{{item.country}}</a> / 
+  <a class="href3" href="/city/{{item.city.slug}}/">{{item.city}}</a>
+  <hr>
+  <div class="row">
+    <div class="col-sm-9">
+      <h2>{{item.name}}</h2>
+      <p>Ваше ім'я: {{tourist_name}}</p>
+      <p>
+        {% translate "Preferred date" %}: {{start_date}}
+      </p>
+      <p>
+        {% translate "Number of participants in tour" %}: {{group_size}}
+      </p>
+      {% if comment %}
+        <p>
+          {% translate "Special wishes for tour" %}:
+          <br />
+          {{comment}}
+        </p>
+        {% endif %}
+        <p>Номер телефону:  {{tourist_phone}}</p>
+      
+
+      <h3>{% translate "Maximize your great day in " %}{{item.city}}!</h3>
+      <p>
+        {% translate "We handpicked these tours for you to make a surprise." %}
+      </p>
+      {% for featured in items %}
+        {% include 'item_featured.html' %}
+      {% endfor %}
+    </div>
+    <div class="col-sm-3">
+      <h3>{% translate "Help for trip booking" %}</h3>
+
+      {{request.settings.booking_help|safe}}
+    </div>
+
+</div>
+{% endblock %}

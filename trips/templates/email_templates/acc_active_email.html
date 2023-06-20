@@ -1,0 +1,9 @@
+
+{% autoescape off %}
+
+
+<p class="logo" style="font-size: 2rem; font-weight: bolder;text-align: center;">UberTrip</p>
+<p style="font-size: 2rem;"> Привіт {{ user.username }},</p>
+<p style="font-size: 2rem;"> Будь ласка натисни на дане посилання щоб активувати свій аккаунт</p>
+<p style="font-size: 2rem;">   http://{{ domain }}{% url 'activate' uidb64=uid token=token %}?type={{type}}</p>
+{% endautoescape %}

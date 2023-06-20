@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+<div class="login-block">
+    <i class="fas fa-times close-login"></i>
+    <h3>Увійти в UberTrip</h3>
+    <span class="login-subtitle">Увійдіть, щоб додати речі до свого списку бажань і отримати доступ до своїх замовлень з
+        будь-якого пристрою.</span>
+    <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-button google"><i class="fab fa-google"></i></a>
+    <a href="{% url 'social:begin' 'facebook'%}" class="social-button facebook"><i
+            class="fab fa-facebook-square"></i></a>
+    <div class="or-line">
+        <div class="line left"></div>
+        <div class="or-text"> або </div>
+        <div class="line right"></div>
+    </div>
+    <form action="/email_login/" class="login-form" method="POST">
+        {% csrf_token %}
+        <label for="email">Email</label>
+        <input type="text" id="log-email" name="log-email" placeholder="example@gmail.com">
+        <label for="password">Пароль</label>
+        <input type="password" placeholder="password" name="log-password" id="log-password">
+        <input type="submit" value="Увійти">
+    </form>
+    <div class="line"></div>
+    <p><a href="/password_recover/">Забули пароль?</a> </p>
+    <p>Ще не маєте аккаунту? <a href="#" class="switch">Зареєструйтесь</a> </p>
+</div>

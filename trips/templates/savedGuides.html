@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block styles %}
+
+{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'video.css' %}">
+<script src="{% static 'scripts/video.js' %}" defer></script>
+<link rel="stylesheet" href="{% static 'item_row.css' %}">
+<script>
+    function removeFromSaved(elem,item_pk) {
+      $.ajax({
+        url: "/unSaveGuide/",
+        type: "POST",
+        dataType: 'json',
+        data: {
+          "trip_pk": item_pk,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function (data) {
+          $(elem).closest(".list-item").fadeOut(400)
+          $(elem).removeClass('fas')
+          $(elem).addClass('far')
+          $('.video-wrapper').css("display","none")
+        },
+        error: function (data) {
+          console.log(data);
+        }
+      });
+    }
+  </script>
+<h3 style="text-align: center;">Збережені гіди</h3>
+<div class="container" style="width: 100%;">
+    <div class="row">
+        <div class="col-sm-8">
+            {% for item in items %}
+            {% include 'item_row.html' %}
+            {% endfor %}
+        </div>
+        <div class="col-sm-4 video-wrapper">
+            <iframe src="" title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+    </div>
+</div>
+{% endblock %}
